@@ -7,9 +7,6 @@
 
 Abstract — In this paper, we propose a novel deep ensemble feature (DEF) network to classify gastric sections from endoscopic images. Different from recent deep ensemble learning methods, which need to train deep features and classifiers individually to obtain fused classification results, the proposed method can simultaneously learn the deep ensemble feature from arbitrary number of convolutional neural networks (CNNs) and the decision classifier in an end-to-end trainable manner. It comprises two sub networks, the ensemble feature network and the decision network. The former sub network learns the deep ensemble feature from multiple CNNs to represent endoscopic images. The latter sub network learns to obtain the classification labels by using the deep ensemble feature. Both sub networks are optimized based on the proposed ensemble feature loss and the decision loss which guide the learning of deep features and decisions. As shown in the experimental results, the proposed method outperforms the state-of-the-art deep learning, ensemble learning, and deep ensemble learning methods.
 
-#* Flowchart of USEAQ
-
-#![image](https://github.com/nchucvml/USEAQ/blob/master/Fig_Flowchart.png)
 
 * If you use the DEF network for your research, please cite the following papers.
 
