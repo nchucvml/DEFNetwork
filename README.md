@@ -14,3 +14,9 @@ Abstract — In this paper, we propose a novel deep ensemble feature (DEF) netwo
 
 
 [2] T.-H. Lin, C.-R. Huang, H.-C. Cheng and B.-S. Sheu, "Gastric section detection based on decision fusion of convolutional neural networks", Proc. IEEE Biomed. Circuits Syst. Conf., pp. 1-4, Oct. 2019.
+
+
+##############################################
+
+Pretrained weights of VGG19, Inception_v3, Resnet v2_50 are from https://github.com/tensorflow/models/tree/master/research/slim#pre-trained-models
+Pretrained weights of Densenet121 are from https://github.com/pudae/tensorflow-densenet
