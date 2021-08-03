@@ -1,4 +1,4 @@
-# Deep Ensemble Feature Network (DEF Network)
+# DEFNet
 
 # 
 ## Deep Ensemble Feature Network for Gastric Section Classification
