@@ -9,25 +9,30 @@
 
 Abstract — In this paper, we propose a novel deep ensemble feature (DEF) network to classify gastric sections from endoscopic images. Different from recent deep ensemble learning methods, which need to train deep features and classifiers individually to obtain fused classification results, the proposed method can simultaneously learn the deep ensemble feature from arbitrary number of convolutional neural networks (CNNs) and the decision classifier in an end-to-end trainable manner. It comprises two sub networks, the ensemble feature network and the decision network. The former sub network learns the deep ensemble feature from multiple CNNs to represent endoscopic images. The latter sub network learns to obtain the classification labels by using the deep ensemble feature. Both sub networks are optimized based on the proposed ensemble feature loss and the decision loss which guide the learning of deep features and decisions. As shown in the experimental results, the proposed method outperforms the state-of-the-art deep learning, ensemble learning, and deep ensemble learning methods.
 
+## Reference
+* If you use the DEF network for your research, please cite the following papers.
+
+[1] T.-H. Lin, J.-Y. Jhang, C.-R. Huang, Y.-C. Tsai, H.-C. Cheng and B.-S. Sheu, "Deep Ensemble Feature Network for Gastric Section Classification,"  IEEE Journal of Biomedical and Health Informatics, vol. 25, no. 1, pp. 77-87, Jan. 2021, doi: 10.1109/JBHI.2020.2999731.
+
+[2] T.-H. Lin, C.-R. Huang, H.-C. Cheng and B.-S. Sheu, "Gastric section detection based on decision fusion of convolutional neural networks", in Proc. IEEE Biomed. Circuits Syst. Conf., pp. 1-4, Oct. 2019.
+
+## Due to our medical dataset cannot be released, we utilize an open source dataset for demonstration.
+## Important Note: DEF Network is suitable for higher resolution image datasets.
+
 ## Demo
-
-###### Due to our medical dataset is undisclosed, we utilize open source dataset for demonstration.
-
 Dataset: dollars image (250x120)
 
 source: https://www.kaggle.com/nsojib/bangla-money
 
-<img src="./dollars/train/1/1_21.jpg" style="zoom:70%"/><img src="./dollars/train/2/2_21.jpg" style="zoom:70%"/><img src="./dollars/train/5/5_21.jpg" style="zoom:70%"/><img src="./dollars/train/10/10_21.jpg" style="zoom:70%"/><img src="./dollars/train/20/20_21.jpg" style="zoom:70%"/><img src="./dollars/train/50/50_21.jpg" style="zoom:70%"/><img src="./dollars/train/100/100_21.jpg" style="zoom:70%"/><img src="./dollars/train/500/500_21.jpg" style="zoom:70%"/><img src="./dollars/train/1000/1000_21.jpg" style="zoom:70%"/>
+## Create tfrecord (we have already create the tfrecord of dollars in the ./tfrecord)
 
-###### Create tfrecord (we have already create the tfrecord of dollars in the ./tfrecord)
 
 Place your training data in ./trainall folder as  ./trainall/1/1_0.jpg, 1_1.jpg ...
-
-??																							/2/2_0.jpg, 2_1.jpg ...
-??																							/5/5_0.jpg, 5_1.jpg ...
-??																									.
-??																									.
-??																									.
+																								/2/2_0.jpg, 2_1.jpg ...
+																								/5/5_0.jpg, 5_1.jpg ...
+																										.
+																										.
+																										.
 
 Modify the ./datasets/convert_data.py _NUM_VALIDATION = 333 
 (333 means that it will randomly choose 100 images as your testing data, and the other data will be your training data)
@@ -36,13 +41,13 @@ Modify the ./datasets/convert_data.py _NUM_VALIDATION = 333
 python download_and_convert_data.py  --dataset_name=myown --dataset_dir=./
 ```
 
-###### Place tfrecord
+## Place tfrecord
 
 Put the data_train_00000-of-00001.tfrecord to ./tfrecord/
 Put the data_validation_00000-of-00001.tfrecord to ./tfrecord/
 Put the labels.txt to ./tfrecord/
 
-###### Training
+## Training
 
 Modify the ./datasets/decode_tfrecord.py SPLITS_TO_SIZES = {'train': 1637, 'validation:' 333}
 
@@ -72,13 +77,6 @@ Uncomment   line 380
 ```
 python main.py
 ```
-
-* If you use the DEF network for your research, please cite the following papers.
-
-[1] T.-H. Lin, J.-Y. Jhang, C.-R. Huang, Y.-C. Tsai, H.-C. Cheng and B.-S. Sheu, "Deep Ensemble Feature Network for Gastric Section Classification,"  IEEE Journal of Biomedical and Health Informatics, vol. 25, no. 1, pp. 77-87, Jan. 2021, doi: 10.1109/JBHI.2020.2999731.
-
-
-[2] T.-H. Lin, C.-R. Huang, H.-C. Cheng and B.-S. Sheu, "Gastric section detection based on decision fusion of convolutional neural networks", in Proc. IEEE Biomed. Circuits Syst. Conf., pp. 1-4, Oct. 2019.
 
 
 ##############################################
