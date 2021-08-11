@@ -16,15 +16,15 @@ Abstract — In this paper, we propose a novel deep ensemble feature (DEF) netwo
 
 [2] T.-H. Lin, C.-R. Huang, H.-C. Cheng and B.-S. Sheu, "Gastric section detection based on decision fusion of convolutional neural networks", in Proc. IEEE Biomed. Circuits Syst. Conf., pp. 1-4, Oct. 2019.
 
-## Due to our medical dataset cannot be released, we utilize an open source dataset for demonstration.
-## Important Note: DEF Network is suitable for higher resolution image datasets.
+### Due to our medical dataset cannot be released, we utilize an open source dataset for demonstration.
+### Important Note: DEF Network is suitable for higher resolution image datasets.
 
 ## Demo
 Dataset: dollars image (250x120)
 
 source: https://www.kaggle.com/nsojib/bangla-money
 
-## Create tfrecord (we have already create the tfrecord of dollars in the ./tfrecord)
+###### Create tfrecord (we have already create the tfrecord of dollars in the ./tfrecord)
 
 
 Place your training data in ./trainall folder as  ./trainall/1/1_0.jpg, 1_1.jpg ...
@@ -41,13 +41,13 @@ Modify the ./datasets/convert_data.py _NUM_VALIDATION = 333
 python download_and_convert_data.py  --dataset_name=myown --dataset_dir=./
 ```
 
-## Place tfrecord
+###### Place tfrecord
 
 Put the data_train_00000-of-00001.tfrecord to ./tfrecord/
 Put the data_validation_00000-of-00001.tfrecord to ./tfrecord/
 Put the labels.txt to ./tfrecord/
 
-## Training
+###### Training
 
 Modify the ./datasets/decode_tfrecord.py SPLITS_TO_SIZES = {'train': 1637, 'validation:' 333}
 
