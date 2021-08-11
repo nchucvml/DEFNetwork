@@ -1,0 +1,12 @@
+1. Please download the pretrained models as follows:
+Pretrained weights of VGG19, Inception_v3, Resnet v2_50 are from https://github.com/tensorflow/models/tree/master/research/slim#pre-trained-models
+
+Pretrained weights of Densenet121 are from https://github.com/pudae/tensorflow-densenet
+
+2. Store and rename the pretained models as follows in this folder.
+inception_v3.ckpt
+resnet_v2_50.ckpt
+tf-densenet121.ckpt.data-00000-of-00001
+tf-densenet121.ckpt.index
+tf-densenet121.ckpt.meta
+vgg_19.ckpt
