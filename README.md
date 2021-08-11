@@ -16,11 +16,11 @@ Abstract — In this paper, we propose a novel deep ensemble feature (DEF) netwo
 ## Important Note: DEF Network is suitable for higher resolution (at least hundreds by hundreds) image datasets.
 
 ## Reference
-* If you use the DEF network for your research, please cite the following papers.
+If you use the DEF network for your research, please cite the following papers.
 
-*[1] T.-H. Lin, J.-Y. Jhang, C.-R. Huang, Y.-C. Tsai, H.-C. Cheng and B.-S. Sheu, "Deep Ensemble Feature Network for Gastric Section Classification,"  IEEE Journal of Biomedical and Health Informatics, vol. 25, no. 1, pp. 77-87, Jan. 2021, doi: 10.1109/JBHI.2020.2999731.
+[1] T.-H. Lin, J.-Y. Jhang, C.-R. Huang, Y.-C. Tsai, H.-C. Cheng and B.-S. Sheu, "Deep Ensemble Feature Network for Gastric Section Classification,"  IEEE Journal of Biomedical and Health Informatics, vol. 25, no. 1, pp. 77-87, Jan. 2021, doi: 10.1109/JBHI.2020.2999731.
 
-*[2] T.-H. Lin, C.-R. Huang, H.-C. Cheng and B.-S. Sheu, "Gastric section detection based on decision fusion of convolutional neural networks", in Proc. IEEE Biomed. Circuits Syst. Conf., pp. 1-4, Oct. 2019.
+[2] T.-H. Lin, C.-R. Huang, H.-C. Cheng and B.-S. Sheu, "Gastric section detection based on decision fusion of convolutional neural networks", in Proc. IEEE Biomed. Circuits Syst. Conf., pp. 1-4, Oct. 2019.
 
 ## Demo
 Dataset: dollars image (250x120)
