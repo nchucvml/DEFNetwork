@@ -33,7 +33,7 @@ source: https://www.kaggle.com/nsojib/bangla-money
 Place your training data in the ./trainall folder
 Each subfolder contains the training data of the dollor in the ./trainall folder as follows:
 
-![image](https://github.com/nchucvml/DEFNetwork/blob/ed53938de392518ae36fe0db97bed11b80ff8d0e/trainall.PNG)
+![image](https://github.com/nchucvml/DEFNetwork/blob/main/trainall.PNG)
 
 ./trainall/1/1_0.jpg, 1_1.jpg ...
 																
