@@ -28,15 +28,18 @@ source: https://www.kaggle.com/nsojib/bangla-money
 
 
 Place your training data in the ./trainall folder
-Each subfolder contains the training data of the dollor in the ./trainall folder as 
+Each subfolder contains the training data of the dollor in the ./trainall folder as follows:
+
 ![image](https://github.com/nchucvml/DEFNetwork/blob/main/trainall.PNG)
 
 ./trainall/1/1_0.jpg, 1_1.jpg ...
 																			./trainall/2/2_0.jpg, 2_1.jpg ...
 																			./trainall/5/5_0.jpg, 5_1.jpg ...
-																										.
-																										.
-																										.
+
+.
+.
+.
+
 
 Modify the ./datasets/convert_data.py _NUM_VALIDATION = 333 
 (333 means that it will randomly choose 100 images as your testing data, and the other data will be your training data)
