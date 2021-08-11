@@ -3,7 +3,7 @@
 # 
 ## Deep Ensemble Feature Network for Gastric Section Classification
 
-![image](https://github.com/nchucvml/DEFNetwork/blob/master/flowchart.png)
+![image](https://github.com/nchucvml/DEFNetwork/blob/main/flowchart.PNG)
 
 ## Code coming soon
 
