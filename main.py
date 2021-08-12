@@ -10,37 +10,64 @@ import matplotlib.pyplot as plt
 import tensorflow as tf
 import numpy as np
 import input_data
+import argparse
 import time
 import os
 
 slim = tf.contrib.slim
 
+parser = argparse.ArgumentParser(description='DEF Processing')
+parser.add_argument('--mode', default='train', help='select your action, type \'train\' or \'teat\'')
+# input param
+parser.add_argument('--source_data_dir', default='./tfrecord', help='the location of your dataset')
+parser.add_argument('--num_classes', default=9, help='the number of categories in your dataset')
+parser.add_argument('--num_train', default=1637, help='the number of images in your training data')
+parser.add_argument('--num_test', default=333, help='the number of images in your testing data')
+# output param
+parser.add_argument('--weights_dir', default='./result', help='the location of your training weights')
+parser.add_argument('--logs_dir', default='./logs', help='the location of your logs')
+parser.add_argument('--logits_dir', default='./logits', help='the location of your logits')
+# training param
+parser.add_argument('--training_batch_size', default=5, help='training param, your batch size')
+parser.add_argument('--training_learning_rate', default=1e-5, help='training param, your learning rate')
+parser.add_argument('--training_epochs', default=500, help='training param, your training epochs')
+# testing param
+parser.add_argument('--testing_your_pretrained_weights_path', default='./result/fine_tune.ckpt-500',
+                    help='testing param, your pretrained weights path. If you have no pretrained weights, type \'None\'')
+parser.add_argument('--testing_your_dataset_labesls', default=['1', '2', '5', '10', '20', '50', '100', '500', '1000'],
+                    help='testing param, your dataset labels')
+
+args = parser.parse_args()
+
 # dataset parameters
-NUM_CLASSES = 9
-NUM_TRAIN = 1637
-NUM_VAL = 333
-DATA_DIR = './tfrecord'
+NUM_CLASSES = args.num_classes
+NUM_TRAIN = args.num_train
+NUM_VAL = args.num_test
+DATA_DIR = args.source_data_dir
 IMAGE_SIZE = 224
 
-save_dir = './result'
+weights_dir = args.weights_dir
 trained_file = 'fine_tune.ckpt'
-log_dir = './logs'
+logs_dir = args.logs_dir
+logits_dir = args.logits_dir
 
 # training parameters
-batch_size = 5
-learning_rate = 1e-5
-training_epochs = 500
+batch_size = args.training_batch_size
+learning_rate = args.training_learning_rate
+training_epochs = args.training_epochs
 display_epoch = 1
 train_num_batch = int(np.ceil(NUM_TRAIN / batch_size))
 val_num_batch = int(np.ceil(NUM_VAL / batch_size))
+
+# testing parameters
+checkpoint_file_myown = args.testing_your_pretrained_weights_path
+data_label = args.testing_your_dataset_labesls
 
 # pretrained parameters
 checkpoint_file_vgg = './pre_train/vgg_19.ckpt'
 checkpoint_file_googlenet = './pre_train/inception_v3.ckpt'
 checkpoint_file_densenet = './pre_train/tf-densenet121.ckpt'
 checkpoint_file_resnet = './pre_train/resnet_v2_50.ckpt'
-# if you don't have pretrained weights, checkpoint_file_myown = None
-checkpoint_file_myown = './result/fine_tune.ckpt-500'
 
 
 def my_fus(inputs, num_classes, is_training):
@@ -78,8 +105,12 @@ def my_fus(inputs, num_classes, is_training):
 
 
 def Train():
-    if not tf.gfile.Exists(save_dir):
-        tf.gfile.MakeDirs(save_dir)
+    if not tf.gfile.Exists(weights_dir):
+        tf.gfile.MakeDirs(weights_dir)
+    if not tf.gfile.Exists(logs_dir):
+        tf.gfile.MakeDirs(logs_dir)
+    if not tf.gfile.Exists(logits_dir):
+        tf.gfile.MakeDirs(logits_dir)
 
     train_images, train_labels = input_data.load_batch_inception(DATA_DIR, batch_size, NUM_CLASSES, True, IMAGE_SIZE,
                                                                  IMAGE_SIZE)
@@ -126,13 +157,13 @@ def Train():
     variables_name_can_be_restored_densenet = list(set(global_variables).intersection(set(densenet_variables)))
 
     variables_can_be_restored_vgg = [var for var in model_variables if
-                                 var.name[:-2] in variables_name_can_be_restored_vgg]
+                                     var.name[:-2] in variables_name_can_be_restored_vgg]
     variables_can_be_restored_google = [var for var in model_variables if
-                                    var.name[:-2] in variables_name_can_be_restored_google]
+                                        var.name[:-2] in variables_name_can_be_restored_google]
     variables_can_be_restored_resnet = [var for var in model_variables if
-                                    var.name[:-2] in variables_name_can_be_restored_resnet]
+                                        var.name[:-2] in variables_name_can_be_restored_resnet]
     variables_can_be_restored_densenet = [var for var in model_variables if
-                                      var.name[:-2] in variables_name_can_be_restored_densenet]
+                                          var.name[:-2] in variables_name_can_be_restored_densenet]
 
     restorer_vgg = tf.train.Saver(variables_can_be_restored_vgg)
     restorer_google = tf.train.Saver(variables_can_be_restored_google)
@@ -146,7 +177,7 @@ def Train():
     accuracy = tf.reduce_mean(tf.cast(correct, tf.float32))
     acc_summary = tf.summary.scalar('accuracy', accuracy)
 
-    save = tf.train.Saver(max_to_keep=4)
+    save = tf.train.Saver(max_to_keep=5)
 
     config = tf.ConfigProto(allow_soft_placement=False)
     config.gpu_options.allow_growth = True
@@ -156,7 +187,7 @@ def Train():
     with tf.Session(config=config) as sess:
         sess.run(tf.global_variables_initializer())
 
-        train_writer = tf.summary.FileWriter(log_dir, sess.graph)
+        train_writer = tf.summary.FileWriter(logs_dir, sess.graph)
 
         # custom pretrained weights
         # ckpt = tf.train.latest_checkpoint(save_dir)
@@ -230,11 +261,11 @@ def Train():
                                                                               val_accuracy / val_num_batch))
             cm = confusion_matrix(gt_lab, pre_lab)
             print(cm)
-            np.savetxt('./logits/' + str(fileCnt_logits) + '_label.csv', gt_lab, delimiter=',')
-            np.savetxt('./logits/' + str(fileCnt_logits) + '_logits.csv', feat_softmax, delimiter=',')
+            np.savetxt(logits_dir + '/' + str(fileCnt_logits) + '_label.csv', gt_lab, delimiter=',')
+            np.savetxt(logits_dir + '/' + str(fileCnt_logits) + '_logits.csv', feat_softmax, delimiter=',')
 
             if (epoch + 1) % 100 == 0:
-                save.save(sess, os.path.join(save_dir, trained_file), global_step=epoch + 1)
+                save.save(sess, os.path.join(weights_dir, trained_file), global_step=epoch + 1)
                 print('Epoch {}/{}  save model successfully!'.format(epoch + 1, training_epochs))
 
         print('train finish!')
@@ -243,13 +274,10 @@ def Train():
 
 
 def Test():
-    train_images, train_labels = input_data.load_batch_inception(DATA_DIR, batch_size, NUM_CLASSES, True, IMAGE_SIZE,
-                                                                 IMAGE_SIZE)
     test_images, test_labels = input_data.load_batch_inception_test(DATA_DIR, batch_size, NUM_CLASSES, False,
                                                                     IMAGE_SIZE, IMAGE_SIZE)
 
     input_images = tf.placeholder(dtype=tf.float32, shape=[None, IMAGE_SIZE, IMAGE_SIZE, 3])
-    input_labels = tf.placeholder(dtype=tf.float32, shape=[None, NUM_CLASSES])
     is_training = tf.placeholder(dtype=tf.bool)
 
     logits, logits_vgg, logits_google, logits_resnet, logits_densenet = my_fus(input_images,
@@ -258,20 +286,18 @@ def Test():
     logits = (logits + logits_vgg + logits_google + logits_resnet + logits_densenet) / 5
 
     pred = tf.argmax(logits, axis=1)
-    correct = tf.equal(pred, tf.argmax(input_labels, 1))
-    accuracy = tf.reduce_mean(tf.cast(correct, tf.float32))
     restorer = tf.train.Saver()
 
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
         ckpt = checkpoint_file_myown
-        if ckpt is not None:
+
+        if ckpt != 'None':
             restorer.restore(sess, ckpt)
             print("Model restored.")
         coord = tf.train.Coordinator()
         threads = tf.train.start_queue_runners(sess=sess, coord=coord)
 
-        feat_softmax = [[]]
         pd_lab = []
         gt_lab = []
         start = time.time()
@@ -281,7 +307,6 @@ def Test():
             pred_value = sess.run(pred, feed_dict={input_images: imgs, is_training: False})
             pd_lab = np.concatenate((pd_lab, pred_value), axis=-1)
             gt_lab = np.concatenate((gt_lab, np.argmax(labs, 1)), axis=-1)
-            correct = np.equal(pd_lab, gt_lab)
         end = time.time()
         pd_lab = pd_lab.tolist()
         gt_lab = gt_lab.tolist()
@@ -294,11 +319,9 @@ def Test():
         np.set_printoptions(precision=2)
 
         # Plot non-normalized confusion matrix
-        plot_confusion_matrix(gt_lab, pd_lab, classes=np.array(['1', '2', '5', '10', '20', '50', '100', '500', '1000']),
-                              title='Confusion matrix')
+        plot_confusion_matrix(gt_lab, pd_lab, classes=np.array(data_label), title='Confusion matrix')
         plt.show()
-        print(classification_report(gt_lab, pd_lab,
-                                    target_names=np.array(['1', '2', '5', '10', '20', '50', '100', '500', '1000'])))
+        print(classification_report(gt_lab, pd_lab, target_names=np.array(data_label)))
         print('Accuracy: ', metrics.accuracy_score(gt_lab, pd_lab))
         print('=============================================================')
         print('Precision macro: ', metrics.precision_score(gt_lab, pd_lab, average='macro'))
@@ -309,7 +332,7 @@ def Test():
         print('=============================================================')
         print('f-measure macro: ', metrics.f1_score(gt_lab, pd_lab, average='macro'))
         print('f-measure weighted: ', metrics.f1_score(gt_lab, pd_lab, average='weighted'))
-        print('testing time', (end - start) / 752)
+        print('testing time', (end - start) / NUM_VAL)
         coord.request_stop()
         coord.join(threads)
     tf.reset_default_graph()
@@ -376,5 +399,10 @@ def plot_confusion_matrix(y_true, y_pred, classes, normalize=False, title=None, 
 
 if __name__ == '__main__':
     tf.reset_default_graph()
-    Train()
-    # Test()
+
+    if args.mode == 'train':
+        Train()
+    elif args.mode == 'test':
+        Test()
+    else:
+        print('select your action, type --mode \'train\' or \'test\'')
