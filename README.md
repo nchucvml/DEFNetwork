@@ -41,15 +41,24 @@ Pretrained weights of Densenet121 are from https://github.com/pudae/tensorflow-d
 
 ### Create tfrecord
 
-Place your training data in the ./trainall folder.
+Place your training data in the ./dollars folder.
 
 ```
 python download_and_convert_data.py
 ```
 
+The tfrecord of dollars will be generated in the ./tfrecord.
 
-We have already create the tfrecord of dollars in the ./tfrecord
 
+You can modify the default aguument values for your own dataset. 
+```
+default augment value:
+
+--dataset_name=myown
+--dataset_source_train_dir=./dollars/train
+--dataset_source_test_dir=./dollars/test
+--dataset_destination_dir=./tfrecord
+```
 
 
 
