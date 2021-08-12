@@ -49,8 +49,7 @@ python download_and_convert_data.py
 
 The tfrecord of dollars will be generated in the ./tfrecord.
 
-
-You can modify the default aguument values for your own dataset. 
+You can modify the default argument values for your own dataset. 
 ```
 default augment value:
 
@@ -60,72 +59,45 @@ default augment value:
 --dataset_destination_dir=./tfrecord
 ```
 
-
-
-
-Each subfolder contains the training data of the dollor in the ./trainall folder as follows:
-
-![image](https://github.com/nchucvml/DEFNetwork/blob/main/trainall.PNG)
-
-
-
-./trainall/1/1_0.jpg, 1_1.jpg ...
-																
-./trainall/2/2_0.jpg, 2_1.jpg ...
-															
-./trainall/5/5_0.jpg, 5_1.jpg ...
-
-.
-.
-.
-
-
-Modify the ./datasets/convert_data.py _NUM_VALIDATION = 333 
-(333 means that it will randomly choose 100 images as your testing data, and the other data will be your training data)
-
-```
-python download_and_convert_data.py  --dataset_name=myown --dataset_dir=./
-```
-
-### Place tfrecord
-
-Put the data_train_00000-of-00001.tfrecord to ./tfrecord/
-
-Put the data_validation_00000-of-00001.tfrecord to ./tfrecord/
-
-Put the labels.txt to ./tfrecord/
-
 ### Training
 
-Modify the ./datasets/decode_tfrecord.py SPLITS_TO_SIZES = {'train': 1637, 'validation:' 333}
-
-Modify the ./datasets/decode_tfrecord.py _NUM_CLASSES = 9
-
-(1637 and 333 means that the numbers of your training data and testing data, respectively. Please modify the numbers by yourself.)
+```
+python main.py --mode train
+```
 
 ```
-python main.py
+default augument value:
+
+# input param
+--source_data_dir './tfrecord'
+--num_classes 9
+--num_train 1637
+--num_test 333
+
+# output param
+--weights_dir ./result
+--logs_dir ./logs
+--logits_dir ./logits
+
+# training param
+--training_batch_size 5
+--training_learning_rate 1e-5
+--training_epochs 500
 ```
 
 ### Testing
 
-Modify the ./main.py
-
-Comment out line 379
-
-Uncomment   line 380
-
 ```
-377	if __name__ == '__main__':
-378	    tf.reset_default_graph()
-379	    # Train()
-380	    Test()
+python main.py --mode test
 ```
 
 ```
-python main.py
-```
+default augment value:
 
+# testing param
+--testing_your_pretrained_weights_path ./result/fine_tune.ckpt-500
+--testing_your_dataset_labesls ['1', '2', '5', '10', '20', '50', '100', '500', '1000']
+```
 
 ----------------------------------
 
