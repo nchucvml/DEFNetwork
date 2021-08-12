@@ -16,8 +16,8 @@ Abstract — In this paper, we propose a novel deep ensemble feature (DEF) netwo
 
 ![image](https://github.com/nchucvml/DEFNetwork/blob/main/experiments.PNG)
 
-## Because our medical dataset cannot be released, we utilize an open source dataset for demonstration.
-## Important Note: DEF Network is suitable for higher resolution (at least hundreds by hundreds) image datasets.
+### Because our medical dataset cannot be released, we utilize an open source dataset for demonstration.
+### Important Note: DEF Network is suitable for higher resolution (at least hundreds by hundreds) image datasets.
 
 ## Reference
 If you use the DEF network for your research, please cite the following papers.
@@ -31,7 +31,7 @@ Dataset: dollars image (250x120)
 
 source: https://www.kaggle.com/nsojib/bangla-money
 
-###### Create tfrecord (we have already create the tfrecord of dollars in the ./tfrecord)
+### Create tfrecord (we have already create the tfrecord of dollars in the ./tfrecord)
 
 
 Place your training data in the ./trainall folder
@@ -57,13 +57,13 @@ Modify the ./datasets/convert_data.py _NUM_VALIDATION = 333
 python download_and_convert_data.py  --dataset_name=myown --dataset_dir=./
 ```
 
-###### Place tfrecord
+### Place tfrecord
 
 Put the data_train_00000-of-00001.tfrecord to ./tfrecord/
 Put the data_validation_00000-of-00001.tfrecord to ./tfrecord/
 Put the labels.txt to ./tfrecord/
 
-###### Training
+### Training
 
 Modify the ./datasets/decode_tfrecord.py SPLITS_TO_SIZES = {'train': 1637, 'validation:' 333}
 
@@ -75,7 +75,7 @@ Modify the ./datasets/decode_tfrecord.py _NUM_CLASSES = 9
 python main.py
 ```
 
-###### Testing
+### Testing
 
 Modify the ./main.py
 
@@ -97,7 +97,7 @@ python main.py
 
 ##############################################
 
-###### Environment settings
+### Environment settings
 
 Pretrained weights of VGG19, Inception_v3, Resnet v2_50 are from https://github.com/tensorflow/models/tree/master/research/slim#pre-trained-models
 
