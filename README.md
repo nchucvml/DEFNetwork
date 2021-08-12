@@ -41,12 +41,24 @@ Pretrained weights of Densenet121 are from https://github.com/pudae/tensorflow-d
 
 ### Create tfrecord
 
+Place your training data in the ./trainall folder.
+
+```
+python download_and_convert_data.py
+```
+
+
 We have already create the tfrecord of dollars in the ./tfrecord
 
-Place your training data in the ./trainall folder.
+
+
+
+
 Each subfolder contains the training data of the dollor in the ./trainall folder as follows:
 
 ![image](https://github.com/nchucvml/DEFNetwork/blob/main/trainall.PNG)
+
+
 
 ./trainall/1/1_0.jpg, 1_1.jpg ...
 																
