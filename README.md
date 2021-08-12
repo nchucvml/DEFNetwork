@@ -28,7 +28,7 @@ If you use the DEF network for your research, please cite the following papers.
 
 [2] T.-H. Lin, C.-R. Huang, H.-C. Cheng and B.-S. Sheu, "Gastric section detection based on decision fusion of convolutional neural networks", in Proc. IEEE Biomed. Circuits Syst. Conf., pp. 1-4, Oct. 2019.
 
-## Demo
+## Usage
 Dataset: dollars image (250x120)
 
 source: https://www.kaggle.com/nsojib/bangla-money
