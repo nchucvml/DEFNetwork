@@ -36,8 +36,7 @@ source: https://www.kaggle.com/nsojib/bangla-money
 
 We have already create the tfrecord of dollars in the ./tfrecord
 
-
-Place your training data in the ./trainall folder
+Place your training data in the ./trainall folder.
 Each subfolder contains the training data of the dollor in the ./trainall folder as follows:
 
 ![image](https://github.com/nchucvml/DEFNetwork/blob/main/trainall.PNG)
@@ -63,7 +62,9 @@ python download_and_convert_data.py  --dataset_name=myown --dataset_dir=./
 ### Place tfrecord
 
 Put the data_train_00000-of-00001.tfrecord to ./tfrecord/
+
 Put the data_validation_00000-of-00001.tfrecord to ./tfrecord/
+
 Put the labels.txt to ./tfrecord/
 
 ### Training
