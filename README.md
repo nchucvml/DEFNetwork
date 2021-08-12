@@ -17,7 +17,8 @@ The gastric section detection results of [1].
 
 ![image](https://github.com/nchucvml/DEFNetwork/blob/main/experiments.PNG)
 
-### Because our medical dataset cannot be released, we utilize an open source dataset for demonstration.
+Because our medical dataset cannot be released, we utilize an open source dataset for demonstration in the following.
+
 ### Important Note: DEF Network is suitable for higher resolution (at least hundreds by hundreds) image datasets.
 
 ## Reference
