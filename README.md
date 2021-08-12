@@ -31,7 +31,9 @@ Dataset: dollars image (250x120)
 
 source: https://www.kaggle.com/nsojib/bangla-money
 
-### Create tfrecord (we have already create the tfrecord of dollars in the ./tfrecord)
+### Create tfrecord
+
+We have already create the tfrecord of dollars in the ./tfrecord
 
 
 Place your training data in the ./trainall folder
