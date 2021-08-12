@@ -107,8 +107,8 @@ The most important packages:
 
 ```
 tensorfow					1.14.0
-tensorflow-gpu				1.14.0
-cuda						10.0
+tensorflow-gpu		1.14.0
+cuda						  10.0
 ```
 
 The other detail packages:
