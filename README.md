@@ -33,6 +33,12 @@ Dataset: dollars image (250x120)
 
 source: https://www.kaggle.com/nsojib/bangla-money
 
+Prtrained models: 
+
+Pretrained weights of VGG19, Inception_v3, Resnet v2_50 are from https://github.com/tensorflow/models/tree/master/research/slim#pre-trained-models
+
+Pretrained weights of Densenet121 are from https://github.com/pudae/tensorflow-densenet
+
 ### Create tfrecord
 
 We have already create the tfrecord of dollars in the ./tfrecord
@@ -100,14 +106,9 @@ python main.py
 ```
 
 
-##############################################
+----------------------------------
 
-### Environment settings
-
-Pretrained weights of VGG19, Inception_v3, Resnet v2_50 are from https://github.com/tensorflow/models/tree/master/research/slim#pre-trained-models
-
-Pretrained weights of Densenet121 are from https://github.com/pudae/tensorflow-densenet
-
+## Environment settings
 
 The most important packages:
 
