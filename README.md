@@ -82,10 +82,11 @@ default augument value:
 --logits_dir ./logits
 
 # training param
---training_batch_size 5
+--training_batch_size 5    
 --training_learning_rate 1e-5
 --training_epochs 500
 ```
+We suggest a larger training batch size! 
 
 ### Testing
 
