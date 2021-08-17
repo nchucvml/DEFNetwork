@@ -40,9 +40,9 @@ parser.add_argument('--testing_your_dataset_labesls', default=['1', '2', '5', '1
 args = parser.parse_args()
 
 # dataset parameters
-NUM_CLASSES = args.num_classes
-NUM_TRAIN = args.num_train
-NUM_VAL = args.num_test
+NUM_CLASSES = int(args.num_classes)
+NUM_TRAIN = int(args.num_train)
+NUM_VAL = int(args.num_test)
 DATA_DIR = args.source_data_dir
 IMAGE_SIZE = 224
 
@@ -52,9 +52,9 @@ logs_dir = args.logs_dir
 logits_dir = args.logits_dir
 
 # training parameters
-batch_size = args.training_batch_size
-learning_rate = args.training_learning_rate
-training_epochs = args.training_epochs
+batch_size = int(args.training_batch_size)
+learning_rate = float(args.training_learning_rate)
+training_epochs = int(args.training_epochs)
 display_epoch = 1
 train_num_batch = int(np.ceil(NUM_TRAIN / batch_size))
 val_num_batch = int(np.ceil(NUM_VAL / batch_size))
@@ -78,26 +78,26 @@ def my_fus(inputs, num_classes, is_training):
 
     net = tf.concat([net_vgg, net_google, net_resnet, net_densenet], -1)
 
-    net_vgg = slim.conv2d(net_vgg, 9, [1, 1], activation_fn=None, normalizer_fn=None, scope='vgg')
+    net_vgg = slim.conv2d(net_vgg, NUM_CLASSES, [1, 1], activation_fn=None, normalizer_fn=None, scope='vgg')
     net_vgg = tf.squeeze(net_vgg, [1, 2], name='SpatialSqueeze')
     net_vgg = slim.softmax(net_vgg, scope='konet')
 
-    net_google = slim.conv2d(net_google, 9, [1, 1], activation_fn=None, normalizer_fn=None, scope='google')
+    net_google = slim.conv2d(net_google, NUM_CLASSES, [1, 1], activation_fn=None, normalizer_fn=None, scope='google')
     net_google = tf.squeeze(net_google, [1, 2], name='SpatialSqueeze')
     net_google = slim.softmax(net_google, scope='konet')
 
-    net_resnet = slim.conv2d(net_resnet, 9, [1, 1], activation_fn=None, normalizer_fn=None, scope='resnet')
+    net_resnet = slim.conv2d(net_resnet, NUM_CLASSES, [1, 1], activation_fn=None, normalizer_fn=None, scope='resnet')
     net_resnet = tf.squeeze(net_resnet, [1, 2], name='SpatialSqueeze')
     net_resnet = slim.softmax(net_resnet, scope='konet')
 
-    net_densenet = slim.conv2d(net_densenet, 9, [1, 1], activation_fn=None, normalizer_fn=None, scope='densenet')
+    net_densenet = slim.conv2d(net_densenet, NUM_CLASSES, [1, 1], activation_fn=None, normalizer_fn=None, scope='densenet')
     net_densenet = tf.squeeze(net_densenet, [1, 2], name='SpatialSqueeze')
     net_densenet = slim.softmax(net_densenet, scope='konet')
 
     net = slim.conv2d(net, 512, [1, 1], scope='ko1')
     net = slim.conv2d(net, 1024, [1, 1], scope='ko2')
     net = slim.conv2d(net, 1024, [1, 1], scope='ko3')
-    net = slim.conv2d(net, 9, [1, 1], activation_fn=None, normalizer_fn=None, scope='ko4')
+    net = slim.conv2d(net, NUM_CLASSES, [1, 1], activation_fn=None, normalizer_fn=None, scope='ko4')
     net = tf.squeeze(net, [1, 2], name='SpatialSqueeze')
     net = slim.softmax(net, scope='konet')
 
