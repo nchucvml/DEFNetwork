@@ -71,6 +71,7 @@ checkpoint_file_resnet = './pre_train/resnet_v2_50.ckpt'
 
 
 def my_fus(inputs, num_classes, is_training):
+    # obtain the feature maps of CNNs: vgg, googlenet, resnet, densenet
     net_vgg = vgg.vgg_19(inputs, num_classes, is_training)
     net_google, _ = inception_v3.inception_v3(inputs, num_classes, is_training)
     net_resnet, _ = resnet_v2.resnet_v2_50(inputs, num_classes, is_training)
@@ -78,6 +79,7 @@ def my_fus(inputs, num_classes, is_training):
 
     net = tf.concat([net_vgg, net_google, net_resnet, net_densenet], -1)
 
+    # for the ensemble feature networks
     net_vgg = slim.conv2d(net_vgg, NUM_CLASSES, [1, 1], activation_fn=None, normalizer_fn=None, scope='vgg')
     net_vgg = tf.squeeze(net_vgg, [1, 2], name='SpatialSqueeze')
     net_vgg = slim.softmax(net_vgg, scope='konet')
@@ -94,6 +96,7 @@ def my_fus(inputs, num_classes, is_training):
     net_densenet = tf.squeeze(net_densenet, [1, 2], name='SpatialSqueeze')
     net_densenet = slim.softmax(net_densenet, scope='konet')
 
+    # for the decision networks
     net = slim.conv2d(net, 512, [1, 1], scope='ko1')
     net = slim.conv2d(net, 1024, [1, 1], scope='ko2')
     net = slim.conv2d(net, 1024, [1, 1], scope='ko3')
@@ -111,12 +114,12 @@ def Train():
         tf.gfile.MakeDirs(logs_dir)
     if not tf.gfile.Exists(logits_dir):
         tf.gfile.MakeDirs(logits_dir)
-
+    # load preprocessed data
     train_images, train_labels = input_data.load_batch_inception(DATA_DIR, batch_size, NUM_CLASSES, True, IMAGE_SIZE,
                                                                  IMAGE_SIZE)
     test_images, test_labels = input_data.load_batch_inception_test(DATA_DIR, batch_size, NUM_CLASSES, False,
                                                                     IMAGE_SIZE, IMAGE_SIZE)
-
+    # declare the placeholders
     input_images = tf.placeholder(dtype=tf.float32, shape=[None, IMAGE_SIZE, IMAGE_SIZE, 3])
     input_labels = tf.placeholder(dtype=tf.float32, shape=[None, NUM_CLASSES])
 
@@ -131,8 +134,7 @@ def Train():
     cost_vgg = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=input_labels, logits=logits_vgg))
     cost_google = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=input_labels, logits=logits_google))
     cost_resnet = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=input_labels, logits=logits_resnet))
-    cost_densenet = tf.reduce_mean(
-        tf.nn.softmax_cross_entropy_with_logits(labels=input_labels, logits=logits_densenet))
+    cost_densenet = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=input_labels, logits=logits_densenet))
 
     # deep network loss + decision loss
     cost = (cost + cost_vgg + cost_google + cost_resnet + cost_densenet) / 5
@@ -144,6 +146,7 @@ def Train():
     model_resnet_variables = tf.train.list_variables(checkpoint_file_resnet)
     model_densenet_variables = tf.train.list_variables(checkpoint_file_densenet)
 
+    # for the pretrained weights loading
     global_variables = [v.name[:-2] for v in model_variables]
 
     vgg_variables = [v[0] for v in model_vgg_variables]
@@ -177,6 +180,7 @@ def Train():
     accuracy = tf.reduce_mean(tf.cast(correct, tf.float32))
     acc_summary = tf.summary.scalar('accuracy', accuracy)
 
+    # save 5 weights at most
     save = tf.train.Saver(max_to_keep=5)
 
     config = tf.ConfigProto(allow_soft_placement=False)
@@ -184,6 +188,7 @@ def Train():
 
     merged = tf.summary.merge([loss_summary, acc_summary])
 
+    # start to flow into the data
     with tf.Session(config=config) as sess:
         sess.run(tf.global_variables_initializer())
 
@@ -194,7 +199,7 @@ def Train():
         # ckpt = './result/fine_tune.ckpt-175'
         # save.restore(sess, ckpt)
 
-        # 4 pretrained weights of deep networks
+        # 4 pretrained weights of the deep networks
         print('Loading checkpoint %s' % checkpoint_file_vgg)
         restorer_vgg.restore(sess, checkpoint_file_vgg)
         print('Loading checkpoint %s' % checkpoint_file_googlenet)
@@ -204,7 +209,6 @@ def Train():
         print('Loading checkpoint %s' % checkpoint_file_densenet)
         restorer_densenet.restore(sess, checkpoint_file_densenet)
 
-        print('load')
         coord = tf.train.Coordinator()
         threads = tf.train.start_queue_runners(sess=sess, coord=coord)
 
@@ -274,9 +278,10 @@ def Train():
 
 
 def Test():
+    # load data
     test_images, test_labels = input_data.load_batch_inception_test(DATA_DIR, batch_size, NUM_CLASSES, False,
                                                                     IMAGE_SIZE, IMAGE_SIZE)
-
+    # declare the placeholders
     input_images = tf.placeholder(dtype=tf.float32, shape=[None, IMAGE_SIZE, IMAGE_SIZE, 3])
     is_training = tf.placeholder(dtype=tf.bool)
 
@@ -288,6 +293,7 @@ def Test():
     pred = tf.argmax(logits, axis=1)
     restorer = tf.train.Saver()
 
+    # start to flow into the data
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
         ckpt = checkpoint_file_myown
